@@ -17,22 +17,15 @@ client.connect({port: port, host: '127.0.0.1'}, () => {
         arr.push(process.argv[a]);
     }
     console.log(arr);
-    client.write(arr);
+    console.write(arr);
 });
 
 client.on('data', (data) => {
     if (data === bad)
         client.destroy();
-    if (data === good)
-        sendQuestion();
-    else {
-        let qst = questions[currentIndex];
-        let answer = qst.good;
-        console.log('\n' + qst.quest);
-        console.log('Answer:' + data);
-        console.log('Server:' + answer);
-        console.log('Result:' + (data === answer ? 'It is a right answer': 'Bad answer'));
-        sendQuestion();
+    if (data === good) {
+        sendFILES();
+        client.destroy();
     }
 });
 
@@ -41,11 +34,9 @@ client.on('close', function () {
 });
 
 
+//otpravka files
+function sendFILES() {
 
-function sendQuestion() {
-    if (currentIndex < questions.length -1) {
-        let qst = questions[++currentIndex].quest;
-        client.write(qst);
     }
     else
         client.destroy();

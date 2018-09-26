@@ -5,6 +5,7 @@ const clientString = 'QA';
 const clientString2='FILES';
 const good = 'ACK';
 const bad = 'DEC';
+let locationOfFile='D:\\';
 let logger = fs.createWriteStream('client_id.log');
 
 let seed = 0;
@@ -34,6 +35,8 @@ const server = net.createServer((client) => {
         {
             client.id = Date.now() + seed++;
             logger=fs.createWriteStream('client_'+client.id+'.log');
+            locationOfFile=locationOfFile+'/Client'+client.id;
+            fs.mkdir(locationOfFile);
             writeLog('Client #' + client.id + ' connected\n');
             client.write(data === clientString ? good : bad);
             v=2;
@@ -41,7 +44,6 @@ const server = net.createServer((client) => {
         {
             writeLog('Client #' + client.id + ' sended: ' + data + '\n');
             let answer='completed';
-
             client.write(answer);
         }
     });
