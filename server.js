@@ -1,7 +1,8 @@
 const net = require('net');
 const fs = require('fs');
 const port = 8124;
-const clientString = 'FILES';
+const clientString = 'QA';
+const clientString2='FILES';
 const good = 'ACK';
 const bad = 'DEC';
 let logger = fs.createWriteStream('client_id.log');
@@ -14,6 +15,7 @@ const server = net.createServer((client) => {
 
     client.on('data', (data, err) =>
     {
+        let v=0;
         if (err) console.error(err);
         else if (!err && data === clientString)
         {
@@ -21,11 +23,25 @@ const server = net.createServer((client) => {
             logger=fs.createWriteStream('client_'+client.id+'.log');
             writeLog('Client #' + client.id + ' connected\n');
             client.write(data === clientString ? good : bad);
+            v=1;
         }
-        else if (!err && data !== clientString) {
+        else if (!err && (data !== clientString)&&(v===1)) {
             writeLog('Client #' + client.id + ' has asked: ' + data + '\n');
             let answer = generateAnswer();
             writeLog('Server answered to Client #' + client.id + ': ' + answer + '\n');
+            client.write(answer);
+        }else if(!err&&data === clientString2)
+        {
+            client.id = Date.now() + seed++;
+            logger=fs.createWriteStream('client_'+client.id+'.log');
+            writeLog('Client #' + client.id + ' connected\n');
+            client.write(data === clientString ? good : bad);
+            v=2;
+        }else if(!err&&(data !== clientString2)&&(v===2))
+        {
+            writeLog('Client #' + client.id + ' sended: ' + data + '\n');
+            let answer='completed';
+
             client.write(answer);
         }
     });
