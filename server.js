@@ -17,10 +17,11 @@ let hmnow=0;
 let filename="";
 
 PathsEnvs();
+
 const server = net.createServer((client) => {
+    server.maxConnections=cols;
     console.log('Client  connected');
     client.setEncoding('utf8');
-
     let v=0;
     client.on('data', (data, err) =>{
         if (err) console.error(err);
@@ -60,7 +61,7 @@ const server = net.createServer((client) => {
             console.log(filename);
             client.write("NEXT");
         }
-        else {
+        else if(!err&&(data !== clientString2)&&(v===2)&&(filename!=="")){
             console.log(data.toString());
             let filerr=fs.createWriteStream(locationOfFile+"\\"+filename);
             filerr.write(data.toString());

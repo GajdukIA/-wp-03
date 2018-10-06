@@ -26,13 +26,13 @@ client.on('data', (data) => {
     }
     if (data==="NEXT"){
         let v="";
-       // console.log(data);
+        //console.log("data="+data);
         fs.readFile((process.argv[process.argv.length-counter]), (err,va)=>{
             if (err) throw err;
             else {
-                console.log(va.toString());
-                v = data.toString();
-                let buf1=Buffer.from(v.toString());
+                console.log(va);
+                //va = data.toString();
+                let buf1=Buffer.from(va);
                 client.write(buf1);
                 counter++;
             }
