@@ -19,7 +19,7 @@ let filename="";
 PathsEnvs();
 
 const server = net.createServer((client) => {
-    server.maxConnections=cols;
+    //server.maxConnections=cols;
     console.log('Client  connected');
     client.setEncoding('utf8');
     let v=0;
